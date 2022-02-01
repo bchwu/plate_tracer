@@ -1,0 +1,491 @@
+########## Input.controller (A.1.1) ##########
+# If file_vbcs is set to on, 
+# the top surface velocity boundary conditions are read in from files,
+# which have location and name specified by vel_bound_file.
+# Requires setting topvbc=1 to take effect.
+
+file_vbcs=1
+
+vel_bound_file="/home/node/bchwu/Plate_Model_Data/M2016_velocity_file_128/bvel"
+
+plate_id_filename="/home/node/bchwu/Plate_Model_Data/M2016_plate_id_128/129.mesh"
+
+mat_control=off
+mat_file=""
+
+# If lith_age is set to on, 
+# then the age of each surface nodes is read from the files
+# specified by lith_age_file. 
+lith_age=off
+
+lith_age_file=""
+
+lith_age_time=off
+
+
+
+########## Output.controller (A.1.2) ##########
+solver=full
+
+# Choose the format and layout of the output files.
+output_format=ascii
+
+# Choose additional output.
+output_optional="surf,botm,geoid,horiz_avg,comp_nd"
+
+
+# Controls the location of output files.
+datadir="/home/node/bchwu/work_1_HR/DATA/case01.output"
+
+# Controls the prefix of output file names such as case.xxxx.xx.xx
+# Cannot contain the “/” character if output_format=ascii.
+datafile="case01"
+
+# The time-step interval between checkpoint output.
+checkpointFrequency=500
+
+# Controls the interval between output files.
+storage_spacing=100
+
+# This parameter controls the maximum degree 
+# of spherical harmonics coefficients for geoid output.
+output_ll_max=60
+
+write_q_files=1
+
+
+########## Mesh.and.processors (A.1.3) ##########
+# This specifies the number of spherical caps of the mesh;
+# Must be 1 for regional spherical model and 12 for full spherical model.
+nproc_surf=12
+
+# These specify the number of FEM nodes in each spherical cap.
+nodex=129
+nodey=129
+nodez=81
+
+# These specify the number of processors in each spherical cap.
+nprocx=4
+nprocy=4
+nprocz=1
+
+# These specify the nested level of multigrid units.
+# nodex = 1 + nprocx * mgunitx * 2^{levels - 1}
+mgunitx=4
+mgunity=4
+mgunitz=10
+levels=4
+
+
+########## Domain.size (A.1.4) ##########
+radius_inner=0.55
+radius_outer=1.0
+
+# If coor=0, there will be uniform mesh in the latitudinal,
+# longitudinal, and radial directions.
+coor=3
+# If coor=1, Coordinates specified by coor_file
+coor_file=""
+# If coor=2, Coordinates refined by coor_refine
+coor_refine=0.1,0.15,0.1,0.2
+# If coor=3, Coordimates refined by following parameters
+r_grid_layers=5   # -1 is number of layers with uniform grid in r
+rr=0.55,0.571094,0.8740,0.9765,1.0  # starting and ending r coodinates
+nr=1,9,51,76,81        # starting and ending node in r direction
+#
+
+########## Restarting.info (A.1.5) ##########
+# If restart is on, each processor will resume the computation from the checkpoint files.
+restart=off
+
+# Similar to restart, except that the model will then only run for 1 time step, 
+# which can be useful to regenerate the flow field
+# and calculate the associated observables.
+post_p=off
+
+datadir_old=""
+
+datafile_old=""
+
+solution_cycles_init=
+
+
+
+########## Run.length (A.1.6) ##########
+cpu_limits_in_seconds=360000000
+
+minstep=21000
+
+maxstep=21000
+
+maxtotstep=21000
+
+
+
+########## Initial.conditions (A.1.7) ##########
+# Which method to use to generate the initial temperature field.
+# If tic_method=12, T is mantle_temp everywhere, except for a cold thermal boundary layer at the top,
+# a hot thermal boundary layer at the bototm and perturbations at all layers.
+tic_method=10
+
+# If zero_elapsed_time is on, the initial time is set to zero. 
+# If it is off and tic_method=-1, 
+# the initial time is read in from the old velo files.
+# Note that this option has no effect when restart=on.
+zero_elapsed_time=1
+
+# If tic_method=0, the initial temperature is a linear
+# temperature gradient with perturbations at specific layers.
+num_perturbations=1
+perturbmag=0.01
+perturbl=3
+perturbm=2
+perturblayer=30
+
+# the age of the oceanic lithoshpere 
+half_space_age=100
+
+mantle_temp=0.52
+
+
+
+########## Boundary.conditions (A.1.8) ##########
+topvbc=1
+topvbxval=0.0
+topvbyval=0.0
+
+botvbc=0
+botvbxval=0.0
+botvbyval=0.0
+
+toptbc=1
+toptbcval=0.0
+
+bottbc=0
+bottbcval=0.0
+
+# Additional parameters for temperature boundary conditions
+# when lith_age is on.
+temperature_bound_adj=off
+
+depth_bound_adj=0.157
+width_bound_adj=0.08727
+
+lith_age_depth=0.0314
+
+
+
+########## Non-dimensional.numbers (A.1.9) ##########
+rayleigh=5.0e07
+
+dissipation_number=0.0
+
+ignore_vischeating=1
+
+# The Gruneisen parameter.
+gruneisen=0.0
+
+# The non-dimensional value of surface temperature.
+# 273 K 
+surfaceT=0.11
+
+# This specifies the internal heating number.
+Q0=100
+
+
+
+########## Depth.info (A.1.10) ##########
+# depth of the lithosphere: 150km
+z_lith=0.0235
+
+# depth of 410-phase change
+z_410=0.0644
+
+# depth of 670-phase change
+z_lmantle=0.1052
+
+# depth of another phase change: 2800km
+z_cmb=0.4395
+
+
+
+########## Viscosity (A.1.11) ##########
+Viscosity=system
+
+# This specifies which method to use to smooth viscosity projection
+# for the multigrid solver.
+visc_smooth_method=1
+
+# If VISC_UPDATE is on, viscosity will be updated every time step.
+# Otherwise, viscosity will be time-independent.
+VISC_UPDATE=on
+
+# for material above z_lith,    mat = 1;
+# for material above z_410,     mat = 2;
+# for material above z_lmantle, mat = 3;
+# for material below z_lmantle, mat = 4;
+num_mat=4
+
+# The pre-exponent factor of layered viscosity structure
+# (η0 in the equations below).
+# There must be as many entries as num_mat in a comma-separated list.
+# 
+visc0=1.0,0.02,0.02,2.0
+
+# Enable temperature dependence or not.
+TDEPV=on
+
+# Which method to use to generate the temperature-dependent viscosity.
+rheol=11
+# for viscosity weak layer at the 670 phase change boundary
+visc_factor=1.0
+visc_sp=0.1
+thermexp_factor=2.5
+thermdiff_factor=2.18
+
+# Parameters defining viscosity law
+# (Eη , Tη , and Zη in the equations above, respectively).
+# There must be as many entries as num_mat in a comma-separated list.
+# E = 120 kJ/mol
+viscE=9.21,9.21,9.21,9.21
+viscT=0.5,0.5,0.5,0.5
+# V = 1.0 cm^3/mol
+viscZ=0.0,0.0,0.0,0.0
+
+# Enable stress dependence (non-Newtonian) or not.
+SDEPV=off
+sdepv_expt=1,1,1,1
+sdepv_misfit=0.001
+
+# Pseudo-plastic rheology
+PDEPV=off
+
+# Compositionally dependent viscosity
+CDEPV=off
+
+# Used in conjunction with tracers.
+# The tracers define the upper boundary of the subducted slab.
+low_visc_channel=off
+low_visc_wedge=off
+
+# If low_visc_channel or low_visc_wedge is on,
+# this specifies the radial extents of the low viscosity zones
+# and the viscosity reduction factor, respectively.
+lv_min_radius=0.9764
+lv_max_radius=0.9921
+lv_channel_thickness=0.0047
+lv_reduction=0.5
+
+# If VMIN is on, minimum viscosity is cut off at visc_min.
+VMIN=off
+visc_min=1.0e-2
+
+# If VMAX is on, maximum viscosity is cut off at visc_max.
+VMAX=on
+visc_max=1.0e2
+
+LITH_VMAX=off
+lith_visc_max=5.0
+
+########## Phase.change.info (A.1.12) ##########
+# These specify the phase change parameters
+# (phase change Rayleigh number, Clapeyron slope,
+# ambient temperature, and phase change width).
+
+# The depth of this phase change is specified by z_410.
+# 1.0Ra
+Ra_410=0.0
+# 2.5 MPa/K
+clapeyron410=0.025
+# 1573 K
+transT410=0.52
+# 50 km
+width410=0.00785
+
+# The depth of this phase change is specified by z_lmantle.
+# 1.067Ra, 5.33e7
+Ra_670=5.33e7
+# -2.0 MPa/K
+clapeyron670=-0.0243
+# 1573 K
+transT670=0.52
+# 40 km
+width670=0.00628
+
+# The depth of this phase change is specified by z_cmb.
+# 0.4Ra
+Ra_cmb=0.0
+# 8 MPa/k
+clapeyroncmb=0.08
+# 2398 K
+transTcmb=0.85
+# 50 km
+widthcmb=0.00785
+
+
+
+########## Momentum.equation.solver (A.1.13) ##########
+# If you wish only to solve for the velocity once
+# (e.g., Stokes flow) then change this parameter to on.
+# However, if you want to do a convection problem,
+# this should be off.
+stokes_flow_only=off
+
+#
+Solver=multigrid
+
+# Whether to remove rigid body rotation component or
+# net angular momentum from the velocity solution.
+# Only effective for global models.
+remove_rigid_rotation=off
+remove_angular_momentum=off
+
+# Whether to assemble stiffness matrix at the node level or not.
+node_assemble=on
+
+# Parameters for multigrid and cgrad solvers.
+mg_cycle=1
+down_heavy=3
+up_heavy=3
+vlowstep=1000
+vhighstep=3
+max_mg_cycles=50
+
+# Maximum iterations of the outer loop for the momentum solver.
+piterations=375
+
+# Convergence criterion for the momentum solver.
+accuracy=5.0e-3
+
+#
+uzawa=cg
+
+# Whether to use the preconditioner.
+precond=on
+
+# Whether to use augmented stiff matrix and 
+# the weight of the augmented stiff matrix.
+aug_lagr=on
+aug_number=2.0e3
+
+# unknow parameters
+tole_compressibility=1e-08
+compress_iter_maxstep=100
+relative_err_accuracy=0.001
+
+
+
+########## Energy.equation.solver (A.1.14) ##########
+# If on, solves the energy equation.
+ADV=on
+
+# If it is equal to 0, the size of the time step is
+# variable and is determined dynamically.
+# Otherwise, the size of the time step is fixed at the specified value.
+fixed_timestep=1.554e-8
+
+# Set the size of the time step to the specified fraction
+# of a maximum stable advection time step.
+# Must be between 0 and 1.
+finetunedt=1.0
+
+# The number of iterations and the weight of each iteration
+# for the energy predictor-corrector solver.
+adv_sub_iterations=2
+adv_gamma=0.5
+
+# If on, the maximum value of the current and previous temperature fields are compared.
+monitor_max_T=on
+
+
+# Currently, don’t change this parameter.
+# It is used only in problems which are integrated backward in time.
+inputdiffusivity=1.0
+
+
+
+########## Age.info (A.1.15) ##########
+# Set initial age (in Myrs).
+# This age determines which files of various time-dependent input to read in. 
+start_age=410
+
+# if fix_init_age = 1, then the plate velocity boundary condition
+# will not be updated every timestep
+fix_init_age=0
+
+# If on, the initial age is set to start_age. If it is off and
+# tic_method=-1, the initial age is read in from previous output.
+reset_startage=0
+
+
+
+########## Debugging.info (A.1.16) ##########
+DESCRIBE=off
+BEGINNER=off
+VERBOSE=off
+
+# If verbose is on,
+# additional information is output to a .info file.
+verbose=off
+
+# If on, the velocity residual will be output on the screen
+# for every iteration of the momentum solver.
+see_convergence=on
+
+
+
+########## Tracer.info (A.1.18) ##########
+tracer=on
+
+tracer_ic_method=0
+tracers_per_element=40
+tracer_file=""
+
+ic_method_for_flavors=0
+
+# thickness of the chemical layer: 250 km
+z_interface=0.58925
+
+regular_grid_deltheta=1.0
+regular_grid_delphi=1.0
+
+# If on, enables thermo-chemical convection.
+chemical_buoyancy=on
+
+buoy_type=1
+
+tracer_flavors=11
+plate_tracer=1
+mark_age=50.0
+mark_plate=901
+init_tracer_frequency=1
+PLATE=919,101,701,305,401,901,9006,926,902
+buoyancy_ratio=0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0
+
+
+
+########## Dimensional.info (A.1.19) ##########
+radius=6.37e+6
+
+density=3.30e+3
+
+thermdiff=1.0e-6
+
+gravacc=9.81
+
+thermexp=3.0e-5
+
+refvisc=1.254e22
+
+cp=1000
+
+density_above=0.0
+
+density_below=8.3e+3
+
+
+
+########## Required.info (A.1.20) ##########
+Problem=convection
+
+Geometry=sphere
