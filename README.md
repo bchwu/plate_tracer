@@ -1,4 +1,4 @@
-Workflow of the palte tracking procedure
+Workflow of the plate tracking procedure
 
 1. Data preparation
    Export the plateIDs from any reconstruction model with a time interval of 1 Myr using the GPlates software.
